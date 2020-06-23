@@ -18,7 +18,8 @@ def getMaxDividers(n, maxK=-1.0):
     return dividers
 
 
-def getArgs(numOfArgs, allowedArgs, startMsg="Enter value", errMsg="Invalid value!", argsMsgs=[], argType=int):
+def getArgs(numOfArgs, allowedArgs, startMsg="Enter value", errMsg="Invalid value!", argsMsgs=[], argType=int,
+            mode="one_line"):
     def checkArg(args, allowedArgs):
         if isinstance(allowedArgs, list):
             for i in args:
@@ -31,22 +32,34 @@ def getArgs(numOfArgs, allowedArgs, startMsg="Enter value", errMsg="Invalid valu
                     return False
             return True
 
-    def getArg():
-        return argType(input())
+    raw_args = []
+
+    def getArg(i):
+        nonlocal raw_args
+        if mode == "line_by_line":
+            return argType(input())
+        if mode == "one_line":
+            if not raw_args:
+                raw_args = input().split(" ")
+            return argType(raw_args[i])
 
     args = [0] * numOfArgs
-    if len(argsMsgs) == 0:
+
+    if not argsMsgs == 0:
         argsMsgs = [""] * numOfArgs
 
     print(startMsg)
     for i in range(numOfArgs):
-        if numOfArgs > 1: print(argsMsgs[i])
-        args[i] = getArg()
+        if numOfArgs > 1 and mode == "line_by_line":
+            print(argsMsgs[i])
+        args[i] = getArg(i)
     while (not checkArg(args, allowedArgs)):
-        print(errMsg, startMsg)
+        print(errMsg)
+        print(startMsg)
         for i in range(numOfArgs):
-            if numOfArgs > 1: print(argsMsgs[i])
-            args[i] = getArg()
+            if numOfArgs > 1 and mode == "line_by_line":
+                print(argsMsgs[i])
+            args[i] = getArg(i)
     return args
 
 
