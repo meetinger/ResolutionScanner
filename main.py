@@ -23,12 +23,12 @@ def getArgs(numOfArgs, allowedArgs, startMsg="Enter value", errMsg="Invalid valu
     def checkArg(args, allowedArgs):
         if isinstance(allowedArgs, list):
             for i in args:
-                if not (i in allowedArgs):
+                if not (argType(i) in allowedArgs):
                     return False
             return True
         else:
             for i in args:
-                if not allowedArgs(i):
+                if not allowedArgs(argType(i)):
                     return False
             return True
 
@@ -39,7 +39,7 @@ def getArgs(numOfArgs, allowedArgs, startMsg="Enter value", errMsg="Invalid valu
         if mode == "line_by_line":
             return argType(input())
         if mode == "one_line":
-            if not raw_args:
+            if (not raw_args) or (not checkArg(raw_args, allowedArgs)):
                 raw_args = input().split(" ")
             return argType(raw_args[i])
 
@@ -48,13 +48,15 @@ def getArgs(numOfArgs, allowedArgs, startMsg="Enter value", errMsg="Invalid valu
     if not argsMsgs == 0:
         argsMsgs = [""] * numOfArgs
 
+    '''
     print(startMsg)
     for i in range(numOfArgs):
         if numOfArgs > 1 and mode == "line_by_line":
             print(argsMsgs[i])
-        args[i] = getArg(i)
+        args[i] = getArg(i)'''
     while (not checkArg(args, allowedArgs)):
-        print(errMsg)
+        if raw_args:
+            print(errMsg)
         print(startMsg)
         for i in range(numOfArgs):
             if numOfArgs > 1 and mode == "line_by_line":
