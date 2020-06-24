@@ -65,6 +65,8 @@ def getArgs(numOfArgs, allowedArgs, startMsg="Enter value", errMsg="Invalid valu
     return args
 
 
+
+
 dataType = getArgs(numOfArgs=1, allowedArgs=[1, 2], startMsg="Enter the data type:\n1) Square \n2) Screen sides")[0]
 
 square = 0
@@ -83,7 +85,7 @@ lowerResFind = getArgs(numOfArgs=1, allowedArgs=[1, 2], startMsg="Enable the low
 threshold = 0
 if lowerResFind == 1:
     # maxResDecrease = getArgs(numOfArgs=1, allowedArgs = lambda x: x > 1, startMsg="Enter the max Resolution decrease(how many times ) ")[0]
-    decreaserType = getArgs(numOfArgs=1, allowedArgs=lambda x: [1, 2],
+    decreaserType = getArgs(numOfArgs=1, allowedArgs=[1, 2],
                             startMsg="Enter the type of decrasing threshold:\n1) Devider(how many times the new resolution may be less than the previous)"
                                      "\n2) Min resolution(Minimum threshold for new resolution)")[0]
 
@@ -102,29 +104,37 @@ while (i >= threshold):
     deviders += getMaxDividers(i, maxK)
     i -= 1
 
-mainSort = getArgs(numOfArgs=1, allowedArgs=lambda x: [1, 4],
-                   startMsg="Sort by:\n1) Square(default)"
-                            "\n2) A/B ratio"
-                            "\n3) A side"
-                            "\n4) B side")[0] - 1
 
-'''mainIsReverse = getArgs(numOfArgs=1, allowedArgs=lambda x: [1, 2],
-                        startMsg="Sort:\n1) Ascending"
-                              "\n2) Descending")[0]-1
+help_sorts_order = "Sorts order\nIf the items in the priority sort are equal, then the lower priority values ​​will be sorted by the lower priority sort.\n" \
+                   "Add minus \"-\" to sort in descending order. \n" \
+                   "For example:\n" \
+                   "3 4 -2 -1\n" \
+                   "These parameters will sort the results first by side A, then by side B, by aspect ratio (descending) and by area (descending)\n" \
+                   "Options:" \
+                   "\n1) Square(default)" \
+                   "\n2) A/B ratio" \
+                   "\n3) A side" \
+                   "\n4) B side" \
 
-secondSort = getArgs(numOfArgs=1, allowedArgs=lambda x: [1, 4],
-                 startMsg="Sort by:\n1) Square(default)"
-                          "\n2) A/B ratio"
-                          "\n3) A side"
-                          "\n4) B side")[0]'''
+
+sorts_order = getArgs(numOfArgs=4, allowedArgs=lambda x: -4 <= x <= 4 and x!=0, startMsg=help_sorts_order, mode="one_line")
+
 
 comparators = [lambda res: res.getSquare(), lambda res: res.getK(), lambda res: res.getA(), lambda res: res.getB(),
-               lambda res: -res.getSquare(), lambda res: -res.getK(), lambda res: -res.getA(), lambda res: -res.getB()]
+               lambda res: -res.getB(), lambda res: -res.getA(), lambda res: -res.getK(), lambda res: -res.getSquare()]
 
-for res in reversed(sorted(deviders, key=comparators[mainSort])):
+def fix_index(x):
+    if x > 0:
+        return (x - 1)
+    else:
+        return x
+
+
+sorts_order = list(map(fix_index, sorts_order))
+
+for i in reversed(sorts_order):
+    deviders.sort(key=comparators[i])
+
+
+for res in deviders:
     print(res.getString())
-
-# print(dataType)
-# deviders = getMaxDividers(square, maxK)
-"""for res in deviders:
-    print(res.getString())"""
