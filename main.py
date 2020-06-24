@@ -48,12 +48,6 @@ def getArgs(numOfArgs, allowedArgs, startMsg="Enter value", errMsg="Invalid valu
     if not argsMsgs == 0:
         argsMsgs = [""] * numOfArgs
 
-    '''
-    print(startMsg)
-    for i in range(numOfArgs):
-        if numOfArgs > 1 and mode == "line_by_line":
-            print(argsMsgs[i])
-        args[i] = getArg(i)'''
     while (not checkArg(args, allowedArgs)):
         if raw_args:
             print(errMsg)
@@ -64,10 +58,20 @@ def getArgs(numOfArgs, allowedArgs, startMsg="Enter value", errMsg="Invalid valu
             args[i] = getArg(i)
     return args
 
+screen_str=\
+"              A            \n"\
+"  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄\n"\
+"  █▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒█\n"\
+"  █▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒█\n"\
+"B █▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒█\n"\
+"  █▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒█\n"\
+"  █▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒█\n"\
+"  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n" \
+"        Square = a*b       \n"\
 
 
 
-dataType = getArgs(numOfArgs=1, allowedArgs=[1, 2], startMsg="Enter the data type:\n1) Square \n2) Screen sides")[0]
+dataType = getArgs(numOfArgs=1, allowedArgs=[1, 2], startMsg=screen_str+"\nEnter the data type:\n1) Square \n2) Screen sides")[0]
 
 square = 0
 if dataType == 1:
@@ -77,7 +81,7 @@ else:
     b = getArgs(numOfArgs=1, allowedArgs=lambda x: x > 0, startMsg="Enter the \"B\" side:")[0]
     square = a * b
 
-maxK = getArgs(numOfArgs=1, allowedArgs=lambda x: x > 0, startMsg="Enter the max A/B ratio:", argType=float)[0]
+maxK = getArgs(numOfArgs=1, allowedArgs=lambda x: x >= 1, errMsg="Invalid Value! \n Aspect ratio >= 1", startMsg="Enter the max A/B ratio:", argType=float)[0]
 
 lowerResFind = getArgs(numOfArgs=1, allowedArgs=[1, 2], startMsg="Enable the lower resolution search?\n1) Yes \n2) No")[
     0]
@@ -86,7 +90,7 @@ threshold = 0
 if lowerResFind == 1:
     # maxResDecrease = getArgs(numOfArgs=1, allowedArgs = lambda x: x > 1, startMsg="Enter the max Resolution decrease(how many times ) ")[0]
     decreaserType = getArgs(numOfArgs=1, allowedArgs=[1, 2],
-                            startMsg="Enter the type of decrasing threshold:\n1) Devider(how many times the new resolution may be less than the previous)"
+                            startMsg="Enter the type of decrasing threshold:\n1) Devider(how many times the new resolution may be less than the previous)"\
                                      "\n2) Min resolution(Minimum threshold for new resolution)")[0]
 
     if decreaserType == 1:
@@ -105,16 +109,20 @@ while (i >= threshold):
     i -= 1
 
 
-help_sorts_order = "Sorts order\nIf the items in the priority sort are equal, then the lower priority values ​​will be sorted by the lower priority sort.\n" \
+help_sorts_order = "Sorts order:\n" \
+                   "If the items in the priority sort are equal, then the lower priority values ​​will be sorted by the lower priority sort.\n" \
                    "Add minus \"-\" to sort in descending order. \n" \
-                   "For example:\n" \
+                   "These parameters will sort the results first by side A, then by side B, by aspect ratio (descending) and by area (descending):\n" \
                    "3 4 -2 -1\n" \
-                   "These parameters will sort the results first by side A, then by side B, by aspect ratio (descending) and by area (descending)\n" \
-                   "Options:" \
-                   "\n1) Square(default)" \
+                   "Available Options:" \
+                   "\n1) Square" \
                    "\n2) A/B ratio" \
                    "\n3) A side" \
                    "\n4) B side" \
+                   "\n-1) Square(descending)" \
+                   "\n-2) A/B ratio(descending)" \
+                   "\n-3) A side(descending)" \
+                   "\n-4) B side(descending)"
 
 
 sorts_order = getArgs(numOfArgs=4, allowedArgs=lambda x: -4 <= x <= 4 and x!=0, startMsg=help_sorts_order, mode="one_line")
