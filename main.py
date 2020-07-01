@@ -1,6 +1,7 @@
 from math import sqrt
 
 from Resolution import Resolution
+from inputs import getArgs
 
 
 def getMaxDividers(n, maxK=-1.0):
@@ -17,46 +18,6 @@ def getMaxDividers(n, maxK=-1.0):
 
     return dividers
 
-
-def getArgs(numOfArgs, allowedArgs, startMsg="Enter value", errMsg="Invalid value!", argsMsgs=[], argType=int,
-            mode="one_line"):
-    def checkArg(args, allowedArgs):
-        if isinstance(allowedArgs, list):
-            for i in args:
-                if not (argType(i) in allowedArgs):
-                    return False
-            return True
-        else:
-            for i in args:
-                if not allowedArgs(argType(i)):
-                    return False
-            return True
-
-    raw_args = []
-
-    def getArg(i):
-        nonlocal raw_args
-        if mode == "line_by_line":
-            return argType(input())
-        if mode == "one_line":
-            if (not raw_args) or (not checkArg(raw_args, allowedArgs)):
-                raw_args = input().split(" ")
-            return argType(raw_args[i])
-
-    args = [0] * numOfArgs
-
-    if not argsMsgs == 0:
-        argsMsgs = [""] * numOfArgs
-
-    while (not checkArg(args, allowedArgs)):
-        if raw_args:
-            print(errMsg)
-        print(startMsg)
-        for i in range(numOfArgs):
-            if numOfArgs > 1 and mode == "line_by_line":
-                print(argsMsgs[i])
-            args[i] = getArg(i)
-    return args
 
 screen_str=\
 "              A            \n"\
@@ -125,7 +86,7 @@ help_sorts_order = "Sorts order:\n" \
                    "\n-4) B side(descending)"
 
 
-sorts_order = getArgs(numOfArgs=4, allowedArgs=lambda x: -4 <= x <= 4 and x!=0, startMsg=help_sorts_order, mode="one_line")
+sorts_order = getArgs(numOfArgs=4, allowedArgs=lambda x: -4 <= x <= 4 and x!=0, startMsg=help_sorts_order, mode="auto", argsMsgs=["First:", "Second:", "Third:", "Fourth:"])
 
 
 comparators = [lambda res: res.getSquare(), lambda res: res.getK(), lambda res: res.getA(), lambda res: res.getB(),
